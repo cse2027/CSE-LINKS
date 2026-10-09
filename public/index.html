@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate Upload</title>
+  <meta name="description" content="Official Student Certificate Upload Portal.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Background Orbs -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <div class="app-container">
+    
+    <!-- HEADER SECTION -->
+    <header class="main-header">
+      <div class="header-brand">
+        <div class="logo-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div>
+          <h1>Certificate Upload</h1>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Live Counter Stats Pill -->
+        <div class="header-stats" id="headerStats">
+          <div class="stat-pill">
+            <span class="stat-label">Uploaded</span>
+            <span class="stat-val text-success" id="statUploaded">0</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-pill">
+            <span class="stat-label">Pending</span>
+            <span class="stat-val text-warning" id="statPending">68</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-pill">
+            <span class="stat-label">Total</span>
+            <span class="stat-val text-primary" id="statTotal">68</span>
+          </div>
+        </div>
+
+        <!-- Admin Portal Trigger Button -->
+        <button class="btn-admin-trigger" id="openAdminBtn">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>Admin Portal</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN FORM CONTAINER (CENTERED) -->
+    <main class="main-centered-container">
+      
+      <!-- FORM CARD -->
+      <div class="glass-card form-card">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-file-signature text-accent"></i> Certificate Upload Form</h2>
+          <p>Fill in student details and attach your certificate in PDF format. (Strictly 1 upload per roll number)</p>
+        </div>
+
+        <form id="certificateForm" novalidate>
+          
+          <!-- NAME FIELD -->
+          <div class="form-group">
+            <label for="studentName"><i class="fa-regular fa-user"></i> Full Student Name</label>
+            <div class="input-wrapper">
+              <input type="text" id="studentName" name="name" placeholder="Enter full name" required autocomplete="name">
+              <i class="fa-solid fa-check validation-icon icon-success"></i>
+            </div>
+          </div>
+
+          <!-- ROLL NO FIELD -->
+          <div class="form-group">
+            <label for="rollNo">
+              <i class="fa-solid fa-id-card"></i> Roll Number
+            </label>
+            <div class="input-wrapper">
+              <input type="text" id="rollNo" name="rollNo" placeholder="Enter roll number" required uppercase autocomplete="off">
+              <i class="fa-solid fa-circle-check validation-icon icon-success"></i>
+              <i class="fa-solid fa-circle-xmark validation-icon icon-error"></i>
+            </div>
+            <div class="field-feedback" id="rollFeedback" style="display:none;"></div>
+          </div>
+
+          <!-- PLATFORM DROP DOWN FIELD -->
+          <div class="form-group">
+            <label for="courseSelect"><i class="fa-solid fa-layer-group"></i> Course Category / Platform</label>
+            <div class="select-wrapper">
+              <select id="courseSelect" name="course" required>
+                <option value="" disabled selected>-- Select Platform / Category --</option>
+                <option value="APSSDC">APSSDC</option>
+                <option value="APSCHE">APSCHE</option>
+                <option value="OTHER AICTE CERTIFICATES">OTHER AICTE CERTIFICATES</option>
+              </select>
+              <i class="fa-solid fa-chevron-down select-arrow"></i>
+            </div>
+          </div>
+
+          <!-- COURSE NAME TEXT FIELD -->
+          <div class="form-group">
+            <label for="courseName"><i class="fa-solid fa-book-open"></i> Course Name</label>
+            <div class="input-wrapper">
+              <input type="text" id="courseName" name="courseName" placeholder="Enter course name (e.g. Python, AWS, CyberSecurity)" required autocomplete="off">
+            </div>
+          </div>
+
+          <!-- FILE UPLOAD DROPZONE FIELD -->
+          <div class="form-group">
+            <label><i class="fa-solid fa-file-pdf"></i> Upload File (PDF Format Only)</label>
+            
+            <div class="upload-dropzone" id="dropzone">
+              <input type="file" id="fileInput" name="certificatePdf" accept="application/pdf,.pdf" required>
+              
+              <div class="dropzone-content" id="dropzoneEmpty">
+                <div class="dropzone-icon">
+                  <i class="fa-solid fa-file-arrow-up"></i>
+                </div>
+                <div class="dropzone-text">
+                  <p class="drop-title">Drag & Drop PDF here or <span>Browse File</span></p>
+                  <p class="drop-subtitle">Only PDF format files allowed (Max: 15MB)</p>
+                </div>
+              </div>
+
+              <div class="file-preview-card" id="filePreviewCard" style="display:none;">
+                <div class="file-info">
+                  <i class="fa-solid fa-file-pdf file-type-icon"></i>
+                  <div class="file-details">
+                    <span class="file-name" id="previewFileName">certificate.pdf</span>
+                    <span class="file-size" id="previewFileSize">0 KB</span>
+                  </div>
+                </div>
+                <button type="button" class="btn-remove-file" id="btnRemoveFile" title="Remove file">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- FILE NAMING FORMAT SUGGESTION CARD (HOME SCREEN) -->
+          <div class="file-naming-card" id="namingCard">
+            <div class="naming-header">
+              <i class="fa-solid fa-lightbulb text-warning"></i>
+              <span>Required File Naming Format</span>
+            </div>
+            <div class="required-format-display">
+              Format: <code id="requiredNamePattern">ROLLNUMBER_COURSENAME.pdf</code>
+            </div>
+            <div class="naming-status-box" id="namingStatusBox">
+              <i class="fa-solid fa-circle-info" id="namingIcon"></i>
+              <span id="namingStatusText">Enter Roll Number & Course Name to generate exact file name.</span>
+            </div>
+          </div>
+
+          <!-- SUBMIT BUTTON -->
+          <button type="submit" class="btn-submit" id="btnSubmit">
+            <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Submit Certificate</span>
+            <span class="btn-spinner" style="display:none;"><i class="fa-solid fa-circle-notch fa-spin"></i> Processing & Uploading...</span>
+          </button>
+
+        </form>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      <p>© 2026 Certificate Upload System</p>
+    </footer>
+
+  </div>
+
+  <!-- ADMIN LOGIN MODAL -->
+  <div class="modal-backdrop" id="adminAuthModal" style="display:none;">
+    <div class="modal-card admin-auth-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-lock text-accent"></i> Admin Authentication</h3>
+        <button type="button" class="modal-close-btn" id="closeAdminAuthBtn">&times;</button>
+      </div>
+      <form id="adminAuthForm">
+        <div class="form-group">
+          <label for="adminUsername"><i class="fa-solid fa-user"></i> Username</label>
+          <div class="input-wrapper">
+            <input type="text" id="adminUsername" placeholder="Enter username" required autocomplete="username">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="adminPassword"><i class="fa-solid fa-key"></i> Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="adminPassword" placeholder="Enter password" required autocomplete="current-password">
+          </div>
+        </div>
+        <div class="modal-feedback" id="adminAuthFeedback"></div>
+        <button type="submit" class="btn-submit">
+          <i class="fa-solid fa-right-to-bracket"></i> Login to Admin Portal
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD MODAL -->
+  <div class="modal-backdrop modal-lg" id="adminDashboardModal" style="display:none;">
+    <div class="modal-card admin-dashboard-card">
+      <div class="modal-header">
+        <div class="admin-brand">
+          <i class="fa-solid fa-user-shield text-accent"></i>
+          <div>
+            <h3>Admin Portal & Data Management</h3>
+            <p>Download reports and view pending student roster data</p>
+          </div>
+        </div>
+        <div class="admin-modal-actions">
+          <button class="btn-secondary" id="btnExportCSV">
+            <i class="fa-solid fa-file-csv"></i> Download CSV
+          </button>
+          <button type="button" class="btn-danger-outline" id="btnLogoutAdmin">
+            <i class="fa-solid fa-power-off"></i> Logout
+          </button>
+          <button type="button" class="modal-close-btn" id="closeAdminDashBtn">&times;</button>
+        </div>
+      </div>
+
+      <div class="admin-dashboard-body">
+        
+        <!-- Progress Bar Summary Card -->
+        <div class="progress-box">
+          <div class="progress-header">
+            <span>Overall Submission Completion</span>
+            <span class="percentage-badge" id="adminProgressBadge">0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="adminProgressBarFill" style="width: 0%;"></div>
+          </div>
+          <div class="progress-metrics">
+            <div class="metric-box">
+              <span class="metric-val text-success" id="adminMetricUploaded">0</span>
+              <span class="metric-lbl">Uploaded</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-val text-warning" id="adminMetricPending">68</span>
+              <span class="metric-lbl">Not Uploaded</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-val text-primary" id="adminMetricTotal">68</span>
+              <span class="metric-lbl">Total Expected</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search & View Toggle Controls -->
+        <div class="admin-controls-bar">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="adminSearchInput" placeholder="Filter by Roll No, Name, Platform, or Course...">
+          </div>
+
+          <div class="sub-tabs">
+            <button class="sub-tab-btn active" data-subtab="view-pending" id="subtabPendingBtn">
+              <i class="fa-solid fa-clock"></i> Not Uploaded (<span id="countPendingBadge">68</span>)
+            </button>
+            <button class="sub-tab-btn" data-subtab="view-uploaded" id="subtabUploadedBtn">
+              <i class="fa-solid fa-circle-check"></i> Uploaded (<span id="countUploadedBadge">0</span>)
+            </button>
+          </div>
+        </div>
+
+        <!-- Data Tables -->
+        <div class="admin-tables-container">
+          <!-- Pending List Table -->
+          <div id="view-pending" class="subtab-pane active">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Roll Number</th>
+                    <th>Series</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="pendingTableBody">
+                  <!-- Dynamic -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Uploaded List Table -->
+          <div id="view-uploaded" class="subtab-pane">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Roll Number</th>
+                    <th>Student Name</th>
+                    <th>Platform</th>
+                    <th>Course Name</th>
+                    <th>Uploaded File Name</th>
+                    <th>Uploaded At</th>
+                    <th>Drive Link</th>
+                    <th>Manage</th>
+                  </tr>
+                </thead>
+                <tbody id="uploadedTableBody">
+                  <!-- Dynamic -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- WRONG FILE FORMAT MEME CARD MODAL -->
+  <div class="modal-backdrop" id="wrongFormatModal" style="display:none;">
+    <div class="modal-card wrong-format-card">
+      <button type="button" class="modal-close-btn wrong-format-close" id="closeWrongFormatBtn">&times;</button>
+      
+      <div class="meme-card-body">
+        <div class="meme-img-container">
+          <img src="/Meme.jpg" alt="Wrong Format Meme" class="meme-img" id="memeImage">
+        </div>
+        
+        <p class="meme-dialogue-text">
+          Cheppa kada file format correct ga undali ani...thumbs up kaadu kada..kinda button nokku !!
+        </p>
+
+        <button type="button" class="btn-file-rename" id="btnFileRename">
+          <i class="fa-solid fa-pen-to-square"></i> File Rename
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
